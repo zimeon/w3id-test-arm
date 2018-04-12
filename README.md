@@ -2,4 +2,4 @@
 
   * Assumes checked out copy of config in `~/src/w3id.org/`
   * Creates Apache root in `/tmp/w3id-test-arm` (zaps anything with that name)
-  * Run with `./
+  * Run with `./run_test_apache_mac.sh`
