@@ -10,6 +10,8 @@ mkdir /tmp/w3id-test-arm/logs
 mkdir /tmp/w3id-test-arm/htdocs
 cp ~/src/w3id.org/.htaccess /tmp/w3id-test-arm
 cp -r ~/src/w3id.org/arm /tmp/w3id-test-arm/htdocs
+echo "Using htaccess from this directory"
+cp htaccess /tmp/w3id-test-arm/htdocs/arm/.htaccess
 
 # Run
 echo "Running under on http://localhost:8080/arm/"
@@ -21,6 +23,9 @@ echo "Tailing error and access logs... (^C to exit,  kill -TERM $pid   to clean 
 echo "Try: http://localhost:8080/arm/BAD"
 echo "Try: http://localhost:8080/arm"
 echo "Try: http://localhost:8080/arm/"
-echo "Try: http://localhost:8080/arm/ontologies/core"
+echo "Try: http://localhost:8080/arm/core/ontology/"
+echo "Try: http://localhost:8080/arm/core/ontology/0.1/"
+echo "Try rdf: curl http://localhost:8080/arm/core/ontology/0.1/Arrangement"
+echo "Try html: curl -H 'Accept: text/html' http://localhost:8080/arm/core/ontology/0.1/Arrangement"
 tail -qf /tmp/w3id-test-arm/logs/error_log /tmp/w3id-test-arm/logs/access_log
 
