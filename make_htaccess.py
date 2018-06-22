@@ -69,7 +69,7 @@ def write_rules(w3id_path, ld4p_base, name):
         rdf = '%s/%s/%s.rdf' % (ld4p_base, version, name)
         logging.info("%s %s -> %s" % (name, version, rdf))
         check_exists_200(rdf)
-        html = '%s/%s/doc/lode/%s.html' % (ld4p_base, version, name)
+        html = '%s/%s/%s.html' % (ld4p_base, version, name)
         # FIXME not yet present: check_exists_200(html)
         add_redirect('^%s/%s/%s.rdf' % (w3id_path, version, name), rdf)
         add_redirect('^%s/%s/%s.html' % (w3id_path, version, name), html)
