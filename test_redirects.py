@@ -56,7 +56,7 @@ class TestRedirects(unittest.TestCase):
         self.req('/arm/award/ontology/0.1/award.rdf',
                  redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.rdf'))
         self.req('/arm/award/ontology/0.1/award.html',
-                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/doc/lode/award.html'))
+                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.html'))
         self.req('/arm/award/ontology/0.1/',
                  code=303,
                  redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.rdf'))
@@ -65,7 +65,7 @@ class TestRedirects(unittest.TestCase):
                  redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.rdf'))
         self.req('/arm/award/ontology/0.1/', accept='text/html',
                  code=303,
-                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/doc/lode/award.html'))
+                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.html'))
 
     def test_core(self):
         self.req('/arm/core/ontology',
@@ -80,7 +80,7 @@ class TestRedirects(unittest.TestCase):
         self.req('/arm/core/activity/0.1/activity.rdf',
                  redirect=urljoin(LD4P, '/arm/core/ontology/0.1/activity.rdf'))
         self.req('/arm/core/activity/0.1/activity.html',
-                 redirect=urljoin(LD4P, '/arm/core/ontology/0.1/doc/lode/activity.html'))
+                 redirect=urljoin(LD4P, '/arm/core/ontology/0.1/activity.html'))
 
     def test_origin(self):
         self.req('/arm/core/vocabularies/origin/0.1/',
