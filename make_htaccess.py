@@ -103,10 +103,6 @@ RewriteRule ^$ https://ld4p.github.io/arm/ [R=302,L]""")
 for name, versions in ONTOLOGIES:
     w3id_path = '%s/ontology' % (name)
     ld4p_base = 'https://ld4p.github.io/arm/%s/ontology' % (name)
-    if name == 'activity':
-        # This ontology is the odd-one out for naming
-        w3id_path = 'core/activity'
-        ld4p_base = 'https://ld4p.github.io/arm/core/ontology'
     write_rules(w3id_path, ld4p_base, name)
 
 # Vocabularies
