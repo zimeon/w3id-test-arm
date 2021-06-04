@@ -1,17 +1,15 @@
 #!/bin/bash
 
 # Cleanup
-#killall -9 httpd
+killall -9 httpd
 rm -rf /tmp/w3id-test-arm
 
 # Setup
 mkdir /tmp/w3id-test-arm
 mkdir /tmp/w3id-test-arm/logs
 mkdir /tmp/w3id-test-arm/htdocs
-cp ~/src/w3id.org/.htaccess /tmp/w3id-test-arm
+cp ~/src/w3id.org/.htaccess /tmp/w3id-test-arm/htdocs
 cp -r ~/src/w3id.org/arm /tmp/w3id-test-arm/htdocs
-echo "Using htaccess from this directory"
-cp htaccess /tmp/w3id-test-arm/htdocs/arm/.htaccess
 
 # Run
 echo "Running under on http://localhost:8080/arm/"

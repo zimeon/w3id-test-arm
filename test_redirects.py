@@ -9,7 +9,7 @@ from urllib.parse import urljoin
 
 BASE = 'http://localhost:8080'
 W3ID = 'https://w3id.org'
-LD4P = 'https://ld4p.github.io'
+ARM = 'https://art-and-rare-materials-bf-ext.github.io/'
 
 
 class TestRedirects(unittest.TestCase):
@@ -32,6 +32,26 @@ class TestRedirects(unittest.TestCase):
         if redirect is not None:
             self.assertEqual(location, redirect)
 
+    def test_1_0(self):
+        # At present the 1.0 ARM has only RDF files, no HTML
+        # One ontology
+        self.req('/arm/core/ontology/',
+                 code=302,
+                 redirect=urljoin(W3ID, '/arm/ontology/1.0/'))
+        self.req('/arm/ontology/1.0/',
+                 code=303,
+                 redirect=urljoin(ARM, '/arm/v1.0/ontology/arm_1_0.rdf'))
+        self.req('/arm/ontology/1.0//Annotation',
+                 code=303,
+                 redirect=urljoin(ARM, '/arm/v1.0/ontology/arm_1_0.rdf'))
+        # Five vocabularies
+        for vocab in ('note_types', 'origin', 'physical_presentation', 'status', 'typeface'):
+            self.req('/arm/vocabularies/1.0/' + vocab + '/',
+                     code=303,
+                     redirect=urljoin(ARM, '/arm/v1.0/vocabularies/' + vocab + '.rdf'))
+            self.req('/arm/vocabularies/1.0/' + vocab + '/SomeTermHere',
+                     code=303,
+                     redirect=urljoin(ARM, '/arm/v1.0/vocabularies/' + vocab + '.rdf'))
 
     def test_bad(self):
         self.req('/arm/BAD',
@@ -39,7 +59,7 @@ class TestRedirects(unittest.TestCase):
 
     def test_generic(self):
         self.req('/arm/',
-                 redirect=urljoin(LD4P,'/arm/'))
+                 redirect=urljoin(ARM, '/arm/'))
 
     def test_award(self):
         # Unversioned URIs --> versioned URIs
@@ -54,37 +74,47 @@ class TestRedirects(unittest.TestCase):
                  redirect=urljoin(W3ID, '/arm/award/ontology/0.1/award.html'))
         # Versioned URIs -> content
         self.req('/arm/award/ontology/0.1/award.rdf',
-                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.rdf'))
+                 redirect=urljoin(ARM, '/arm/v0.1/award/ontology/0.1/award.rdf'))
         self.req('/arm/award/ontology/0.1/award.html',
-                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.html'))
+                 redirect=urljoin(ARM, '/arm/v0.1/award/ontology/0.1/award.html'))
         self.req('/arm/award/ontology/0.1/',
                  code=303,
-                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.rdf'))
+                 redirect=urljoin(ARM, '/arm/v0.1/award/ontology/0.1/award.rdf'))
         self.req('/arm/award/ontology/0.1/', accept='application/xml+rdf',
                  code=303,
-                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.rdf'))
+                 redirect=urljoin(ARM, '/arm/v0.1/award/ontology/0.1/award.rdf'))
         self.req('/arm/award/ontology/0.1/', accept='text/html',
                  code=303,
-                 redirect=urljoin(LD4P, '/arm/award/ontology/0.1/award.html'))
+                 redirect=urljoin(ARM, '/arm/v0.1/award/ontology/0.1/award.html'))
 
     def test_core(self):
+        # Unversioned
         self.req('/arm/core/ontology',
                  code=302,
-                 redirect=urljoin(W3ID, '/arm/core/ontology/0.1/'))
+                 redirect=urljoin(W3ID, '/arm/ontology/1.0/'))
+        self.req('/arm/core/ontology/',
+                 code=302,
+                 redirect=urljoin(W3ID, '/arm/ontology/1.0/'))
+
+        self.req('/arm/core/ontology/1.0/',
+                 code=303,
+                 redirect=urljoin(W3ID, 'https://art-and-rare-materials-bf-ext.github.io/arm/v1.0/ontology/arm_1_0.rdf'))
+        self.req('/arm/core/ontology/0.1/',
+                 code=303,
+                 redirect=urljoin(W3ID, 'https://art-and-rare-materials-bf-ext.github.io/arm/v0.1/core/ontology/0.1/core.rdf'))
 
     def test_activity(self):
-        # WIERD PATTERN!
-        self.req('/arm/core/activity',
+        self.req('/arm/activity/ontology',
                  code=302,
-                 redirect=urljoin(W3ID, '/arm/core/activity/0.1/'))
-        self.req('/arm/core/activity/0.1/activity.rdf',
-                 redirect=urljoin(LD4P, '/arm/core/ontology/0.1/activity.rdf'))
-        self.req('/arm/core/activity/0.1/activity.html',
-                 redirect=urljoin(LD4P, '/arm/core/ontology/0.1/activity.html'))
+                 redirect=urljoin(W3ID, '/arm/activity/ontology/0.1/'))
+        self.req('/arm/activity/ontology/0.1/activity.rdf',
+                 redirect=urljoin(ARM, '/arm/v0.1/activity/ontology/0.1/activity.rdf'))
+        self.req('/arm/activity/ontology/0.1/activity.html',
+                 redirect=urljoin(ARM, '/arm/v0.1/activity/ontology/0.1/activity.html'))
 
     def test_origin(self):
         self.req('/arm/core/vocabularies/origin/0.1/',
-                 redirect=urljoin(LD4P, '/arm/core/vocabularies/origin/0.1/origin.rdf'))
+                 redirect=urljoin(ARM, '/arm/v0.1/core/vocabularies/origin/0.1/origin.rdf'))
 
 
 parser = argparse.ArgumentParser(description='Test ARMredirects.')
@@ -94,7 +124,8 @@ parser.add_argument('--verbose', '-v', action='store_true',
                     help='show requests and responses')
 args = parser.parse_args()
 if args.live:
-    BASE = 'https://w3id.org'
+    BASE = W3ID
 logging.basicConfig(level=logging.INFO if args.verbose else logging.WARN)
-unittest.main()
-
+# Avoid using unittest.main() because that messes with argarse
+suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestRedirects)
+unittest.TextTestRunner(verbosity=2).run(suite)

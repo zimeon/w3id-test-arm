@@ -9,6 +9,9 @@ import logging
 import requests
 import sys
 
+print("ABORT: NO LONGER USEFUL WITH v1.0 IN DIFFERENT STRUCTURE, kept for reference")
+exit()
+
 ONTOLOGIES = [
   ('core', ['0.1']),
   ('activity', ['0.1']),
@@ -36,7 +39,7 @@ def add_redirect(path, uri, flags='[R=302,L]'):
 
 def add_conneg(path, rdf, html):
     """Add content negotiation confirguration from path -> rdf or html.
-    
+
     See semweb best practices: http://www.w3.org/TR/swbp-vocab-pub/#recipe4
     """
     print("""
@@ -92,9 +95,6 @@ Options +FollowSymLinks -MultiViews
 RewriteEngine on
 
 AddType application/rdf+xml .rdf .owl
-
-#### Direct just to raw github on develop branch until we publish HTML+onto with conneg, at
-#### least this will allow everyone to work with the real w3id ontology URIs
 
 # Base
 RewriteRule ^$ https://ld4p.github.io/arm/ [R=302,L]""")
