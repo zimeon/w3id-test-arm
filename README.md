@@ -35,7 +35,7 @@ The vocabularies all used to have URIs with prefixes `/arm/core/vocabularies/` a
 
   * `arrangement` has been renamed `physical_presentation`
   * `origin`, `status`, `typeface` have some name
-  * `note_types` is a new vocabulary
+  * `note_types` and `relator` are new vocabularies
   * `handwriting_type` is deprecated so no change of redirect
 
 ## Testing on local version of w3id.org htaccess

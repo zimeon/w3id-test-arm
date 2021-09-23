@@ -33,25 +33,40 @@ class TestRedirects(unittest.TestCase):
             self.assertEqual(location, redirect)
 
     def test_1_0(self):
-        # At present the 1.0 ARM has only RDF files, no HTML
+        # The 1.0 ARM now has both RDF files and HTML
         # One ontology
         self.req('/arm/core/ontology/',
                  code=302,
                  redirect=urljoin(W3ID, '/arm/ontology/1.0/'))
-        self.req('/arm/ontology/1.0/',
+        self.req('/arm/ontology/1.0/', accept='application/xml+rdf',
                  code=303,
                  redirect=urljoin(ARM, '/arm/v1.0/ontology/arm_1_0.rdf'))
-        self.req('/arm/ontology/1.0//Annotation',
+        self.req('/arm/ontology/1.0/', accept='text/html',
+                 code=303,
+                 redirect=urljoin(ARM, '/arm/v1.0/ontology/arm_1_0.html'))
+        self.req('/arm/ontology/1.0/Annotation',
                  code=303,
                  redirect=urljoin(ARM, '/arm/v1.0/ontology/arm_1_0.rdf'))
-        # Five vocabularies
-        for vocab in ('note_types', 'origin', 'physical_presentation', 'status', 'typeface'):
+        self.req('/arm/ontology/1.0/Annotation', accept='application/xml+rdf',
+                 code=303,
+                 redirect=urljoin(ARM, '/arm/v1.0/ontology/arm_1_0.rdf'))
+        self.req('/arm/ontology/1.0/Annotation', accept='text/html',
+                 code=303,
+                 redirect=urljoin(ARM, '/arm/v1.0/ontology/arm_1_0.html#Annotation'))
+        # Six vocabularies
+        for vocab in ('note_types', 'origin', 'physical_presentation', 'relator', 'status', 'typeface'):
             self.req('/arm/vocabularies/1.0/' + vocab + '/',
                      code=303,
                      redirect=urljoin(ARM, '/arm/v1.0/vocabularies/' + vocab + '.rdf'))
+            self.req('/arm/vocabularies/1.0/' + vocab + '/', accept='text/html',
+                     code=303,
+                     redirect=urljoin(ARM, '/arm/v1.0/vocabularies/' + vocab + '.html'))
             self.req('/arm/vocabularies/1.0/' + vocab + '/SomeTermHere',
                      code=303,
                      redirect=urljoin(ARM, '/arm/v1.0/vocabularies/' + vocab + '.rdf'))
+            self.req('/arm/vocabularies/1.0/' + vocab + '/SomeTermHere', accept='text/html',
+                     code=303,
+                     redirect=urljoin(ARM, '/arm/v1.0/vocabularies/' + vocab + '.html#SomeTermHere'))
 
     def test_bad(self):
         self.req('/arm/BAD',
